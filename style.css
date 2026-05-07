@@ -1,0 +1,557 @@
+﻿/* style.css */
+:root {
+    --pink-1: #ff6b9a;
+    --pink-2: #ff3f7a;
+    --rose-1: #c91542;
+    --red-1: #ff2159;
+    --white: #fffafc;
+    --text: #4c1f2d;
+    --shadow: rgba(85, 18, 39, 0.25);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    font-family: 'Trebuchet MS', Verdana, sans-serif;
+    color: var(--text);
+}
+
+.valentine-bg {
+    /* Animated gradient logic:
+       we blend multiple pink/red tones and slowly shift background-position
+       for a dreamy moving backdrop. */
+    background: linear-gradient(
+        130deg,
+        #b80f39 0%,
+        #d61f54 24%,
+        #ff5d97 50%,
+        #ff7aa8 72%,
+        #d32b5e 100%
+    );
+    background-size: 240% 240%;
+    background-attachment: fixed;
+    animation: dreamyGradientShift 18s ease-in-out infinite;
+}
+
+@keyframes dreamyGradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Background glow layer (enabled on reveal/music start via .romantic-glow). */
+.message-page {
+    position: relative;
+}
+
+.message-page::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.9s ease;
+    background:
+        radial-gradient(circle at 20% 24%, rgba(255, 211, 230, 0.26), transparent 42%),
+        radial-gradient(circle at 82% 78%, rgba(255, 132, 177, 0.2), transparent 46%),
+        radial-gradient(circle at 52% 54%, rgba(255, 103, 162, 0.15), transparent 58%);
+}
+
+.message-page.romantic-glow::before {
+    opacity: 1;
+}
+
+.page-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Subtle background hearts container (always on, behind card). */
+.ambient-heart-layer {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Floating heart generation:
+   each heart gets random position/size/duration from JS and drifts upward slowly. */
+.ambient-heart {
+    position: absolute;
+    bottom: -30px;
+    color: rgba(255, 232, 241, 0.35);
+    animation: ambientHeartFloat linear 1 forwards;
+    will-change: transform, opacity;
+}
+
+@keyframes ambientHeartFloat {
+    0% {
+        transform: translateY(0) translateX(0) scale(0.85);
+        opacity: 0;
+    }
+    15% {
+        opacity: 0.42;
+    }
+    100% {
+        transform: translateY(-112vh) translateX(26px) scale(1.15);
+        opacity: 0;
+    }
+}
+
+/* Sparkle effect:
+   small glowing dots softly flicker and drift for depth. */
+.sparkle-layer {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.sparkle-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 240, 247, 0.7);
+    box-shadow:
+        0 0 8px rgba(255, 226, 238, 0.65),
+        0 0 14px rgba(255, 199, 222, 0.42);
+    animation: sparkleDrift linear 1 forwards, sparkleFlicker ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+@keyframes sparkleDrift {
+    0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(-25vh) translateX(12px);
+        opacity: 0;
+    }
+}
+
+@keyframes sparkleFlicker {
+    0%, 100% { filter: brightness(0.9); }
+    50% { filter: brightness(1.3); }
+}
+
+.card {
+    width: 100%;
+    max-width: 640px;
+    background: rgba(255, 250, 252, 0.92);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 14px 36px var(--shadow);
+    backdrop-filter: blur(4px);
+}
+
+h1 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 3rem;
+}
+
+.form-card h1 {
+    color: #cc5555;
+    text-shadow:
+        0 0 6px rgba(255, 255, 255, 0.9),
+        0 0 14px rgba(255, 124, 167, 0.85),
+        0 0 24px rgba(255, 56, 120, 0.75);
+    animation: headingGlow 2.2s ease-in-out infinite alternate;
+}
+
+.dear-name-glow {
+    color: #d37d7d;
+    text-shadow:
+        0 0 6px rgba(255, 255, 255, 0.9),
+        0 0 14px rgba(255, 139, 185, 0.9),
+        0 0 24px rgba(255, 71, 141, 0.8);
+    animation: dearNameGlow 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes headingGlow {
+    from {
+        text-shadow:
+            0 0 4px rgba(255, 255, 255, 0.8),
+            0 0 10px rgba(255, 124, 167, 0.7),
+            0 0 18px rgba(255, 56, 120, 0.6);
+    }
+    to {
+        text-shadow:
+            0 0 8px rgba(255, 255, 255, 1),
+            0 0 18px rgba(255, 124, 167, 0.95),
+            0 0 30px rgba(255, 56, 120, 0.85);
+    }
+}
+
+@keyframes dearNameGlow {
+    from {
+        text-shadow:
+            0 0 4px rgba(255, 255, 255, 0.8),
+            0 0 10px rgba(255, 139, 185, 0.75),
+            0 0 18px rgba(255, 71, 141, 0.65);
+    }
+    to {
+        text-shadow:
+            0 0 8px rgba(255, 255, 255, 1),
+            0 0 18px rgba(255, 139, 185, 0.95),
+            0 0 30px rgba(255, 71, 141, 0.85);
+    }
+}
+
+.subtext {
+    margin-top: 0;
+    margin-bottom: 18px;
+    opacity: 0.85;
+    font-family: corbel, 'Trebuchet MS', Verdana, sans-serif;
+}
+
+.valentine-form {
+    display: grid;
+    gap: 12px;
+}
+
+label {
+    font-weight: 700;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ffc2d2;
+    border-radius: 12px;
+    background: #fff;
+    color: var(--text);
+    font-size: 1rem;
+    font-family: corbel, 'Trebuchet MS', Verdana, sans-serif;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+textarea {
+    resize: vertical;
+}
+
+input:hover,
+textarea:hover,
+select:hover {
+    border-color: #ff7f85;
+    box-shadow: 0 0 0 3px rgba(255, 127, 133, 0.18);
+    transform: translateY(-2px) scale(1.01);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #ff3f7a;
+    box-shadow:
+        0 0 0 3px rgba(255, 127, 168, 0.25),
+        0 0 14px rgba(255, 63, 122, 0.35);
+    transform: translateY(-1px);
+}
+
+.btn {
+    display: inline-block;
+    text-decoration: none;
+    border: none;
+    border-radius: 999px;
+    padding: 12px 20px;
+    background: linear-gradient(90deg, #ff4d8d, #eb1212);
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    box-shadow: 0 8px 20px rgba(252, 15, 15, 0.35);
+    font-family: corbel, 'Trebuchet MS', Verdana, sans-serif;
+}
+
+.btn i {
+    margin-left: 6px;
+    color: #e03f67;
+    transition: color 0.2s ease;
+    font-size: 20px;
+}
+
+.btn:hover {
+    transform: translateY(-2px) scale(1.01);
+    filter: brightness(1.06);
+}
+
+.btn-alt {
+    background: linear-gradient(90deg, #ff8cab, #ff5c84);
+}
+
+.btn-copy {
+    background: linear-gradient(90deg, #ef476f, #d62856);
+}
+
+.link-box {
+    word-break: break-all;
+    margin: 16px 0;
+    padding: 14px;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px dashed #ff7fa8;
+}
+
+.button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.example-note {
+    margin-top: 16px;
+    font-size: 0.95rem;
+    opacity: 0.85;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 12px;
+    color: #9b1e4b;
+    font-weight: 700;
+}
+
+.typewriter-text {
+    min-height: 90px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    padding-right: 4px;
+    border-right: 2px solid #ff2f6d;
+    white-space: pre-wrap;
+    overflow: hidden;
+    animation: blink-caret 0.75s step-end infinite;
+}
+
+@keyframes blink-caret {
+    50% {
+        border-color: transparent;
+    }
+}
+
+.reveal-text {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 12px;
+    background: #ffe4ed;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+    transition: opacity 0.45s ease, transform 0.45s ease, box-shadow 0.45s ease;
+}
+
+.reveal-text.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: 0 10px 24px rgba(255, 82, 145, 0.22);
+}
+.reveal-text.show i {
+    color: #ff5c84;
+    animation: heartBeat 0.8s ease-in-out 1;
+}
+
+.hidden {
+    display: none;
+}
+
+.fade-up {
+    animation: fadeUp 0.7s ease both;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Floating hearts layer */
+.heart-container {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.6s ease, filter 0.6s ease;
+}
+
+.heart-container.active {
+    opacity: 1;
+}
+
+.heart-container.music-on {
+    filter: drop-shadow(0 0 7px rgba(255, 194, 221, 0.3));
+}
+
+.heart {
+    position: absolute;
+    bottom: -40px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    animation-name: floatUp;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+    will-change: transform, opacity;
+    transition: opacity 0.4s ease;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) translateX(0) scale(0.9);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.65;
+    }
+    100% {
+        transform: translateY(-115vh) translateX(20px) scale(1.25);
+        opacity: 0;
+    }
+}
+
+/* Music toggle floating control */
+.music-toggle {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    min-width: 148px;
+    height: 44px;
+    border: none;
+    border-radius: 999px;
+    padding: 0 14px;
+    cursor: pointer;
+    z-index: 6;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, rgba(255, 67, 136, 0.95), rgba(255, 35, 103, 0.95));
+    box-shadow:
+        0 8px 24px rgba(255, 47, 110, 0.35),
+        0 0 14px rgba(255, 171, 205, 0.55);
+}
+
+.music-toggle.show {
+    animation: musicPulse 1.8s ease-in-out infinite;
+}
+
+.music-toggle.paused {
+    opacity: 0.74;
+    box-shadow: 0 6px 16px rgba(120, 49, 74, 0.35);
+}
+
+@keyframes musicPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+    100% { transform: scale(1); }
+}
+
+/* "Send Your Own Message" reveal section */
+.own-message-section {
+    margin-top: 28px;
+    padding: 16px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(255, 166, 197, 0.32), rgba(255, 107, 154, 0.28));
+    border: 1px solid rgba(255, 123, 167, 0.45);
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.own-message-section.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.own-message-section h3 {
+    margin: 0 0 8px;
+    font-size: 1.15rem;
+}
+.own-message-section h3 i {
+    color: #ff5c84;
+    margin-left: 6px;
+    transition: color 0.2s ease;
+}
+
+.own-message-section p {
+    margin: 0 0 12px;
+}
+
+.own-message-btn {
+    background: linear-gradient(90deg, #ff7faa, #ff4d8d);
+    box-shadow: 0 8px 20px rgba(255, 77, 141, 0.35);
+}
+
+.own-message-btn:hover {
+    box-shadow:
+        0 10px 24px rgba(255, 77, 141, 0.45),
+        0 0 14px rgba(255, 170, 203, 0.6);
+}
+
+@media (max-width: 640px) {
+    .card {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    .button-row {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .music-toggle {
+        top: 10px;
+        right: 10px;
+        min-width: 132px;
+        height: 40px;
+        font-size: 0.85rem;
+    }
+
+    .own-message-section {
+        padding: 14px;
+    }
+
+    /* Keep background effects subtle on mobile. */
+    .ambient-heart {
+        color: rgba(255, 232, 241, 0.28);
+    }
+
+    .sparkle-dot {
+        width: 4px;
+        height: 4px;
+    }
+}

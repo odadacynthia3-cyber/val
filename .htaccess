@@ -1,0 +1,5 @@
+# Block direct web access to hidden dotfiles (e.g. .env, .gitignore, .htaccess, .git/*).
+# This protects sensitive configuration/source-control metadata from being downloaded.
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
